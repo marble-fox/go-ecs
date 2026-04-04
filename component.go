@@ -119,13 +119,16 @@ func (storage *ComponentStorage[T]) IsEntityIDRegistered(entityID EntityID) bool
 func (storage *ComponentStorage[T]) Each(fn func(EntityID, T) error) error {
 	storageWorldSlots := storage.World.entitySlots
 
+	denseCopy := storage.data.dense
+	denseToSparseCopy := storage.data.denseToSparse
+
 	errorsSlice := make([]error, 0)
-	for i, value := range storage.data.dense {
+	for i, value := range denseCopy {
 		if i == 0 {
 			continue
 		}
 
-		entityIndex := storage.data.denseToSparse[i]
+		entityIndex := denseToSparseCopy[i]
 		entityID := makeEntityID(entityIndex, storageWorldSlots[entityIndex].generation, storage.World.ID)
 
 		err := fn(entityID, value)
