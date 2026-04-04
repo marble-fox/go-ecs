@@ -119,6 +119,7 @@ func (storage *ComponentStorage[T]) IsEntityIDRegistered(entityID EntityID) bool
 func (storage *ComponentStorage[T]) Each(fn func(EntityID, T) error) error {
 	storageWorldSlots := storage.World.entitySlots
 
+	// Copy the data to avoid changing the slice while iterating over it
 	denseCopy := storage.data.dense
 	denseToSparseCopy := storage.data.denseToSparse
 
